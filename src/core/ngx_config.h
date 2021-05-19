@@ -17,7 +17,9 @@
 #define __FreeBSD_version  480101
 #endif
 
-
+#ifdef __KOS__
+#include <ngx_kos_config.h>
+#else
 #if (NGX_FREEBSD)
 #include <ngx_freebsd_config.h>
 
@@ -42,7 +44,7 @@
 #include <ngx_posix_config.h>
 
 #endif
-
+#endif
 
 #ifndef NGX_HAVE_SO_SNDLOWAT
 #define NGX_HAVE_SO_SNDLOWAT     1

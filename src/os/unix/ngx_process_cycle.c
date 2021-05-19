@@ -794,6 +794,7 @@ ngx_worker_process_init(ngx_cycle_t *cycle, ngx_int_t worker)
         }
     }
 
+#ifndef __KOS__
     if (geteuid() == 0) {
         if (setgid(ccf->group) == -1) {
             ngx_log_error(NGX_LOG_EMERG, cycle->log, ngx_errno,
@@ -847,6 +848,7 @@ ngx_worker_process_init(ngx_cycle_t *cycle, ngx_int_t worker)
         }
 #endif
     }
+#endif
 
     if (worker >= 0) {
         cpu_affinity = ngx_get_cpu_affinity(worker);

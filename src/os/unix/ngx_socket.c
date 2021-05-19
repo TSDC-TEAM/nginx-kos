@@ -46,6 +46,20 @@ ngx_blocking(ngx_socket_t s)
 
 #endif
 
+#ifdef __KOS__
+int
+ngx_tcp_nopush(ngx_socket_t s)
+{
+    return 0;
+}
+
+
+int
+ngx_tcp_push(ngx_socket_t s)
+{
+    return 0;
+}
+#else
 
 #if (NGX_FREEBSD)
 
@@ -113,4 +127,5 @@ ngx_tcp_push(ngx_socket_t s)
     return 0;
 }
 
+#endif
 #endif

@@ -19,6 +19,12 @@ ngx_alloc(size_t size, ngx_log_t *log)
 {
     void  *p;
 
+#ifdef __KOS__
+    if (0 == size) {
+        size = 1024;
+    }
+#endif
+
     p = malloc(size);
     if (p == NULL) {
         ngx_log_error(NGX_LOG_EMERG, log, ngx_errno,

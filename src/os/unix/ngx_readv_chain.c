@@ -9,6 +9,78 @@
 #include <ngx_core.h>
 #include <ngx_event.h>
 
+#ifdef __KOS__
+static ssize_t
+kos_readv(int fd, const struct iovec *iov, unsigned long iovCount, ngx_log_t *log) {
+    // Validate at least one array is there to write to
+    if (0 >= iovCount) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    /*
+     * Use the iovcnt int and the iov_len to figure out the size of the buffer we need
+     * then use that length to create some memory to read the bytes from the descriptor,
+     * then populate the arrays of the iovec struct with this data from memory
+     */
+    ssize_t totalLength = 0;
+    for (int counter = 0; counter < iovCount; counter++) {
+        if (0 > iov[counter].iov_len) {
+            ngx_log_error(NGX_LOG_ALERT, log, NGX_EINVAL, "IO vector has negative length");
+            errno = EINVAL;
+            return -1;
+        }
+        totalLength = iov[counter].iov_len + totalLength;
+    }
+
+    // Make sure the total Length of iovec structure arrays is less than SIZE_MAX
+    if (totalLength > SIZE_MAX) {
+        errno = EINVAL;
+        return -1;
+    } else if (totalLength == 0) {
+        return 0;
+    }
+
+    // use malloc to read the descriptor and store the data
+    char *buffer = malloc(totalLength);
+    memset(buffer, 0, totalLength);
+
+    // Read from the descriptor and print it out
+    ssize_t readBytes = read(fd, buffer, (size_t) totalLength);
+    if (0 > readBytes) {
+        ngx_log_error(NGX_LOG_ALERT, log, errno, "%s: reading failed", __func__);
+        return -1;
+    }
+
+    // use memcpy to copy the contents to the original buffers
+    size_t currentMemoryLocation = 0;
+
+    for (int counter = 0; counter < iovCount; counter++) {
+        /*
+         * The memcpy function returns a pointer to a destination
+         *
+         * Failure to observe the requirement that the memory areas do not overlap has been the source of significant
+         * bugs.
+         *
+         * Arguments:
+         * void *memcpy(void *dest, const void *src, size_t n);
+         *
+         * Note: the second argument is using pointer arithmetic to find the location from the malloced array
+         */
+        memcpy(iov[counter].iov_base,
+               buffer + currentMemoryLocation,
+               iov[counter].iov_len);
+
+        currentMemoryLocation += iov[counter].iov_len;
+    }
+
+    // Free the bytes acquired through malloc
+    free(buffer);
+
+    // Return success
+    return readBytes;
+}
+#endif // __KOS__
 
 ssize_t
 ngx_readv_chain(ngx_connection_t *c, ngx_chain_t *chain, off_t limit)
@@ -118,8 +190,11 @@ ngx_readv_chain(ngx_connection_t *c, ngx_chain_t *chain, off_t limit)
                    "readv: %ui, last:%uz", vec.nelts, iov->iov_len);
 
     do {
+#ifdef __KOS__
+        n = kos_readv(c->fd, (struct iovec *) vec.elts, vec.nelts, c->log);
+#else
         n = readv(c->fd, (struct iovec *) vec.elts, vec.nelts);
-
+#endif
         if (n == 0) {
             rev->ready = 0;
             rev->eof = 1;

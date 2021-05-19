@@ -264,7 +264,9 @@ ngx_sendmsg(ngx_connection_t *c, ngx_iovec_t *vec)
         if (c->local_sockaddr->sa_family == AF_INET) {
             struct cmsghdr      *cmsg;
             struct in_pktinfo   *pkt;
+#ifndef __KOS__
             struct sockaddr_in  *sin;
+#endif
 
             msg.msg_control = &msg_control;
             msg.msg_controllen = sizeof(msg_control);
@@ -274,11 +276,15 @@ ngx_sendmsg(ngx_connection_t *c, ngx_iovec_t *vec)
             cmsg->cmsg_type = IP_PKTINFO;
             cmsg->cmsg_len = CMSG_LEN(sizeof(struct in_pktinfo));
 
+#ifndef __KOS__
             sin = (struct sockaddr_in *) c->local_sockaddr;
+#endif
 
             pkt = (struct in_pktinfo *) CMSG_DATA(cmsg);
             ngx_memzero(pkt, sizeof(struct in_pktinfo));
+#ifndef __KOS__
             pkt->ipi_spec_dst = sin->sin_addr;
+#endif
         }
 
 #endif

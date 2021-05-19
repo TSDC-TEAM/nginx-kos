@@ -491,11 +491,16 @@ ngx_event_module_init(ngx_cycle_t *cycle)
     ngx_int_t      limit;
     struct rlimit  rlmt;
 
+#ifdef __KOS__
+    rlmt.rlim_cur = 1024 * 1024;
+    rlmt.rlim_max = 1024 * 1024;
+#else
     if (getrlimit(RLIMIT_NOFILE, &rlmt) == -1) {
         ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno,
                       "getrlimit(RLIMIT_NOFILE) failed, ignored");
 
     } else {
+#endif
         if (ecf->connections > (ngx_uint_t) rlmt.rlim_cur
             && (ccf->rlimit_nofile == NGX_CONF_UNSET
                 || ecf->connections > (ngx_uint_t) ccf->rlimit_nofile))
@@ -508,7 +513,9 @@ ngx_event_module_init(ngx_cycle_t *cycle)
                           "open file resource limit: %i",
                           ecf->connections, limit);
         }
+#ifndef __KOS__
     }
+#endif
     }
 #endif /* !(NGX_WIN32) */
 
@@ -698,11 +705,16 @@ ngx_event_process_init(ngx_cycle_t *cycle)
     if (ngx_event_flags & NGX_USE_FD_EVENT) {
         struct rlimit  rlmt;
 
+#ifdef __KOS__
+        rlmt.rlim_cur = 1024 * 1024;
+        rlmt.rlim_max = 1024 * 1024;
+#else
         if (getrlimit(RLIMIT_NOFILE, &rlmt) == -1) {
             ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno,
                           "getrlimit(RLIMIT_NOFILE) failed");
             return NGX_ERROR;
         }
+#endif
 
         cycle->files_n = (ngx_uint_t) rlmt.rlim_cur;
 

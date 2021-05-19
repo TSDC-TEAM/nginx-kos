@@ -8,6 +8,20 @@
 #include <ngx_config.h>
 #include <ngx_core.h>
 
+#ifdef __KOS__
+ngx_int_t
+ngx_shm_alloc(ngx_shm_t *shm)
+{
+    return NGX_ERROR;
+}
+
+void
+ngx_shm_free(ngx_shm_t *shm)
+{
+}
+#else
+#define NGX_HAVE_MAP_ANON 1
+#endif
 
 #if (NGX_HAVE_MAP_ANON)
 

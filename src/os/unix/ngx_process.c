@@ -75,7 +75,9 @@ ngx_signal_t  signals[] = {
 
     { SIGCHLD, "SIGCHLD", "", ngx_signal_handler },
 
+#ifndef __KOS__
     { SIGSYS, "SIGSYS, SIG_IGN", "", NULL },
+#endif
 
     { SIGPIPE, "SIGPIPE, SIG_IGN", "", NULL },
 
@@ -143,7 +145,11 @@ ngx_spawn_process(ngx_cycle_t *cycle, ngx_spawn_proc_pt proc, void *data,
         }
 
         on = 1;
+#ifndef __KOS__
         if (ioctl(ngx_processes[s].channel[0], FIOASYNC, &on) == -1) {
+#else
+        if (ioctl(ngx_processes[s].channel[0], 0x5452, &on) == -1) {
+#endif
             ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno,
                           "ioctl(FIOASYNC) failed while spawning \"%s\"", name);
             ngx_close_channel(ngx_processes[s].channel, cycle->log);

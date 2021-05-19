@@ -363,9 +363,11 @@ main(int argc, char *const *argv)
         return 1;
     }
 
+#ifndef __KOS__
     if (ngx_log_redirect_stderr(cycle) != NGX_OK) {
         return 1;
     }
+#endif
 
     if (log->file->fd != ngx_stderr) {
         if (ngx_close_file(log->file->fd) == NGX_FILE_ERROR) {

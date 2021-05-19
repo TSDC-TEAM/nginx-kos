@@ -50,7 +50,11 @@ ngx_os_init(ngx_log_t *log)
         return NGX_ERROR;
     }
 
+#ifndef __KOS__
     ngx_pagesize = getpagesize();
+#else
+    ngx_pagesize = 4096;
+#endif
     ngx_cacheline_size = NGX_CPU_CACHE_LINE;
 
     for (n = ngx_pagesize; n >>= 1; ngx_pagesize_shift++) { /* void */ }
@@ -74,11 +78,16 @@ ngx_os_init(ngx_log_t *log)
 
     ngx_cpuinfo();
 
+#ifdef __KOS__
+    rlmt.rlim_cur = 1024 * 1024;
+    rlmt.rlim_max = 1024 * 1024;
+#else
     if (getrlimit(RLIMIT_NOFILE, &rlmt) == -1) {
         ngx_log_error(NGX_LOG_ALERT, log, errno,
                       "getrlimit(RLIMIT_NOFILE) failed");
         return NGX_ERROR;
     }
+#endif
 
     ngx_max_sockets = (ngx_int_t) rlmt.rlim_cur;
 

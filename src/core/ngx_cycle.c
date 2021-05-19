@@ -317,6 +317,12 @@ ngx_init_cycle(ngx_cycle_t *old_cycle)
 
     ccf = (ngx_core_conf_t *) ngx_get_conf(cycle->conf_ctx, ngx_core_module);
 
+#ifdef __KOS__
+    ccf->daemon = 0;
+    ccf->master = 0;
+    ccf->worker_processes = 1;
+#endif
+
     if (ngx_test_config) {
 
         if (ngx_create_pidfile(&ccf->pid, log) != NGX_OK) {
