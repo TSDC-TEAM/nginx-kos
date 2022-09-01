@@ -1,0 +1,13 @@
+set(NGINX_VERSION 1.0.0)
+
+@PACKAGE_INIT@
+
+add_executable(Nginx IMPORTED)
+
+set_property(TARGET Nginx APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(Nginx
+	PROPERTIES
+		IMPORTED_LOCATION_RELEASE "@PACKAGE_BIN_INSTALL_DIR@/Nginx"
+)
+
+check_required_components(nginx)
