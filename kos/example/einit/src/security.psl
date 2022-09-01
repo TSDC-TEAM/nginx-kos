@@ -1,0 +1,452 @@
+execute: kl.core.Execute
+
+use nk.base._
+
+use EDL kl.core.Core
+use EDL Einit
+use EDL netinit.NetInit
+use EDL nginx.Nginx
+use EDL kl.VfsRamFs
+use EDL kl.VfsSdCardFs
+use EDL kl.VfsNet
+use EDL kl.drivers.SDCard
+use EDL kl.drivers.RAMDisk
+use EDL kl.rump.Dhcpcd
+use EDL kl.drivers.BSP
+use EDL kl.drivers.GPIO
+
+/* Allows any task to return errors. */
+error
+{
+    grant()
+}
+
+/**
+ * Allows the KasperskyOS kernel to start itself and tasks with the Einit class.
+ */
+execute src = kl.core.Core, dst = kl.core.Core
+{
+    grant()
+}
+
+execute src = kl.core.Core, dst = Einit
+{
+    grant()
+}
+
+/**
+ * Allows the Einit program to start other programs.
+ */
+execute src = Einit, dst = netinit.NetInit
+{
+    grant()
+}
+
+execute src = Einit, dst = nginx.Nginx
+{
+    grant()
+}
+
+execute src = Einit, dst = kl.drivers.RAMDisk
+{
+    grant()
+}
+
+execute src = Einit, dst = kl.drivers.SDCard
+{
+    grant()
+}
+
+execute src = Einit, dst = kl.VfsRamFs
+{
+    grant()
+}
+
+execute src = Einit, dst = kl.VfsSdCardFs
+{
+    grant()
+}
+
+execute src = Einit, dst = kl.VfsNet
+{
+    grant()
+}
+
+execute src = Einit, dst = kl.rump.Dhcpcd
+{
+    grant()
+}
+
+execute src = Einit, dst = kl.drivers.BSP
+{
+    grant()
+}
+
+execute src = Einit, dst = kl.drivers.GPIO
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the Einit class to send requests to the KasperskyOS kernel and get
+ * responses. This enables the Einit program to use core endpoints.
+ */
+request src = Einit, dst = kl.core.Core
+{
+    grant()
+}
+
+response src = kl.core.Core, dst = Einit
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the kl.rump.Dhcpcd class to send requests to the KasperskyOS kernel and get
+ * responses. This enables the Dhcpcd program to use core endpoints.
+ */
+request src = kl.rump.Dhcpcd, dst = kl.core.Core
+{
+    grant()
+}
+
+response src = kl.core.Core, dst = kl.rump.Dhcpcd
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the kl.drivers.RAMDisk class to send requests to the KasperskyOS kernel and get
+ * responses. This enables the RAMDisk driver to use core endpoints.
+ */
+request src = kl.drivers.RAMDisk, dst = kl.core.Core
+{
+    grant()
+}
+
+response src = kl.core.Core, dst = kl.drivers.RAMDisk
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the kl.VfsNet class to send requests to the KasperskyOS kernel and get
+ * responses. This enables the VfsNet program to use core endpoints.
+ */
+request src = kl.VfsNet, dst = kl.core.Core
+{
+    grant()
+}
+
+response src = kl.core.Core, dst = kl.VfsNet
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the kl.VfsRamFs class to send requests to the KasperskyOS kernel and get
+ * responses. This enables the VfsRamFs program to use core endpoints.
+ */
+request src = kl.VfsRamFs, dst = kl.core.Core
+{
+    grant()
+}
+
+response src = kl.core.Core, dst = kl.VfsRamFs
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the kl.VfsSdCardFs class to send requests to the KasperskyOS kernel and get
+ * responses. This enables the VfsSdCardFs program to use core endpoints.
+ */
+request src = kl.VfsSdCardFs, dst = kl.core.Core
+{
+    grant()
+}
+
+response src = kl.core.Core, dst = kl.VfsSdCardFs
+{
+    grant()
+}
+
+request src = kl.core.Core, dst = kl.VfsSdCardFs
+{
+    grant()
+}
+
+response src = kl.VfsSdCardFs, dst = kl.core.Core
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the kl.drivers.BSP class to send requests to the KasperskyOS kernel and get
+ * responses. This enables the BSP driver to use core endpoints.
+ */
+request src = kl.drivers.BSP, dst = kl.core.Core
+{
+    grant()
+}
+
+response src = kl.core.Core, dst = kl.drivers.BSP
+{
+    grant()
+}
+
+/**
+* Allows the tasks with the kl.VfsNet class send requests
+* to tasks with the kl.drivers.BSP class and get responses.
+* DNet uses Mailbox that implemented in BSP.
+*/
+request src = kl.VfsNet, dst = kl.drivers.BSP
+{
+    grant()
+}
+
+response src = kl.drivers.BSP, dst = kl.VfsNet
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the kl.drivers.GPIO class to send requests to the KasperskyOS kernel and get
+ * responses. This enables the GPIO driver to use core endpoints.
+ */
+request src = kl.drivers.GPIO, dst = kl.core.Core
+{
+    grant()
+}
+
+response src = kl.core.Core, dst = kl.drivers.GPIO
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the nginx.Nginx class to send requests to the KasperskyOS kernel and get
+ * responses. This enables the Nginx program to use core endpoints.
+ */
+request src = nginx.Nginx, dst = kl.core.Core
+{
+    grant()
+}
+
+response src = kl.core.Core, dst = nginx.Nginx
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the netinit.NetInit class to send requests to the KasperskyOS kernel and get
+ * responses. This enables the Nginx program to use core endpoints.
+ */
+request src = netinit.NetInit, dst = kl.core.Core
+{
+    grant()
+}
+
+response src = kl.core.Core, dst = netinit.NetInit
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the nginx.Nginx class to send requests to the tasks
+ * with the kl.VfsSdCardFs class and get responses. This enables the
+ * Nginx program to communicate with the VfsSdCardFs program.
+ */
+request src = nginx.Nginx, dst = kl.VfsSdCardFs
+{
+    grant()
+}
+
+response src = kl.VfsSdCardFs, dst = nginx.Nginx
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the netinit.NetInit class to send requests to the tasks
+ * with the kl.VfsSdCardFs class and get responses. This enables the
+ * Nginx program to communicate with the VfsSdCardFs program.
+ */
+request src = netinit.NetInit, dst = kl.VfsSdCardFs
+{
+    grant()
+}
+
+response src = kl.VfsSdCardFs, dst = netinit.NetInit
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the nginx.Nginx class to send requests to the tasks
+ * with the kl.VfsRamFs class and get responses. This enables the
+ * Nginx program to communicate with the VfsRamFs program.
+ */
+request src = nginx.Nginx, dst = kl.VfsRamFs
+{
+    grant()
+}
+
+response src = kl.VfsRamFs, dst = nginx.Nginx
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the netinit.NetInit class to send requests to the tasks
+ * with the kl.VfsRamFs class and get responses. This enables the
+ * Nginx program to communicate with the VfsRamFs program.
+ */
+request src = netinit.NetInit, dst = kl.VfsRamFs
+{
+    grant()
+}
+
+response src = kl.VfsRamFs, dst = netinit.NetInit
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the kl.rump.Dhcpcd class to send requests to the tasks
+ * with the kl.VfsRamFs class and get responses. This enables the
+ * Dhcpcd program to communicate with the VfsRamFs program.
+ */
+request src = kl.rump.Dhcpcd, dst = kl.VfsRamFs
+{
+    grant()
+}
+
+response src = kl.VfsRamFs, dst = kl.rump.Dhcpcd
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the kl.VfsSdCardFs class to send requests to the tasks
+ * with the kl.drivers.SDCard class and get responses. This enables the
+ * VfsSdCardFs program to communicate with the SDcard driver.
+ */
+request src = kl.VfsSdCardFs, dst = kl.drivers.SDCard
+{
+    grant()
+}
+
+response src = kl.drivers.SDCard, dst = kl.VfsSdCardFs
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the kl.VfsRamFs class to send requests to the tasks
+ * with the kl.drivers.RAMDisk class and get responses. This enables the
+ * VfsRamFs program to communicate with the RAMDisk driver.
+ */
+request src = kl.VfsRamFs, dst = kl.drivers.RAMDisk
+{
+    grant()
+}
+
+response src = kl.drivers.RAMDisk, dst = kl.VfsRamFs
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the nginx.Nginx class to send requests to the tasks
+ * with the kl.VfsNet class and get responses. This enables the
+ * Nginx program to communicate with the VfsNet program.
+ */
+request src = nginx.Nginx, dst = kl.VfsNet
+{
+    grant()
+}
+
+response src = kl.VfsNet, dst = nginx.Nginx
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the netinit.NetInit class to send requests to the tasks
+ * with the kl.VfsNet class and get responses. This enables the
+ * Nginx program to communicate with the VfsNet program.
+ */
+request src = netinit.NetInit, dst = kl.VfsNet
+{
+    grant()
+}
+
+response src = kl.VfsNet, dst = netinit.NetInit
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the kl.rump.Dhcpcd class to send requests to the tasks
+ * with the kl.VfsNet class and get responses. This enables the
+ * Dhcpcd program to communicate with the VfsNet program.
+ */
+request src = kl.rump.Dhcpcd, dst = kl.VfsNet
+{
+    grant()
+}
+
+response src = kl.VfsNet, dst = kl.rump.Dhcpcd
+{
+    grant()
+}
+
+/**
+ * Allows the tasks with the kl.drivers.SDCard class to send requests to the KasperskyOS
+ * kernel and get responses. This enables the SDCard driver to use core
+ * endpoints.
+ */
+request src = kl.drivers.SDCard, dst = kl.core.Core
+{
+    grant()
+}
+
+response src = kl.core.Core, dst = kl.drivers.SDCard
+{
+    grant()
+}
+
+/**
+ * Allows the SDCard driver to interact with Kaspersky Security Module
+ * via the security interface.
+ * This enables the SDCard driver to register new ports.
+ */
+security src = kl.drivers.SDCard, method = Register
+{
+    grant ()
+}
+
+/**
+ * Allows the RAMDisk driver to interact with Kaspersky Security Module
+ * via the security interface.
+ */
+security src = kl.drivers.RAMDisk, method = Register
+{
+    grant ()
+}
+
+/**
+ * Allows the tasks with the kl.rump.Dhcpcd class to send requests to the tasks
+ * with the kl.VfsSdCardFs class and get responses. This enables the
+ * Dhcpcd program to communicate with the VfsSdCardFs program.
+ */
+request src = kl.rump.Dhcpcd, dst = kl.VfsSdCardFs
+{
+    grant()
+}
+
+response src = kl.VfsSdCardFs, dst = kl.rump.Dhcpcd
+{
+    grant()
+}

@@ -1,0 +1,25 @@
+entities:
+
+- name: netinit.NetInit
+  env:
+    VFS_FILESYSTEM_BACKEND: client:@ROOTFS_ENTITY@
+    VFS_NETWORK_BACKEND: client:kl.VfsNet
+  connections:
+  - target: kl.VfsNet
+    id: kl.VfsNet
+  - target: @ROOTFS_ENTITY@
+    id: @ROOTFS_ENTITY@
+@INIT_NetInit_ENTITY_CONNECTIONS+@
+
+- name: nginx.Nginx
+  env:
+    VFS_FILESYSTEM_BACKEND: client:@ROOTFS_ENTITY@
+    VFS_NETWORK_BACKEND: client:kl.VfsNet
+  connections:
+  - target: kl.VfsNet
+    id: kl.VfsNet
+  - target: @ROOTFS_ENTITY@
+    id: @ROOTFS_ENTITY@
+@INIT_Nginx_ENTITY_CONNECTIONS+@
+
+@INIT_EXTERNAL_ENTITIES@
