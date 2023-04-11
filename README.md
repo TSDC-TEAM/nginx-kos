@@ -1,43 +1,97 @@
-# Nginx web server for Kaspersky OS
+# nginx web server for KasperskyOS
 
-Version of the Nginx web server adapted for use on Kaspersky OS.
+>This version of nginx is adapted for KasperskyOS.
 
-For a default build and use, you need to install the Kaspersky OS SDK on your system.
-The latest version of the SDK can be downloaded from this [link](https://os.kaspersky.com/development/).
+## What is an nginx web server for KasperskyOS?
 
-All files required to build a web server with Kaspersky OS and an example of connecting nginx to your solution are located in the folder:
+The nginx web server for KasperskyOS is based on the nginx [1.22.1](https://github.com/nginx/nginx/tree/branches/stable-1.22). Please refer to the <http://nginx.org/en/docs/> for more information that are not related to this project.
 
-    ./kos
+For the nginx web server for KasperskyOS the number of worker processes can only be 1. The [`worker_processes`](http://nginx.org/en/docs/ngx_core_module.html#worker_processes) directive in the nginx configuration file is ignored. Other limitations and known issues are described in the [KasperskyOS Community Edition Online Help](https://support.kaspersky.com/help/KCE/1.1/en-US/limitations_and_known_problems.htm).
 
-## Building
+## Table of contents
 
-For build you need to run the script:
+- [nginx web server for KasperskyOS](#nginx-web-server-for-kasperskyos)
+  - [What is an nginx web server for KasperskyOS?](#what-is-an-nginx-web-server-for-kasperskyos)
+  - [Table of contents](#table-of-contents)
+  - [Getting started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Building the nginx web server for KasperskyOS](#building-the-nginx-web-server-for-kasperskyos)
+    - [Installing and removing the nginx web server for KasperskyOS](#installing-and-removing-the-nginx-web-server-for-kasperskyos)
+  - [Usage](#usage)
+    - [Example](#example)
+  - [Contributing](#contributing)
+  - [License](#license)
 
-    ./kos/nginx/cross-build.sh
+## Getting started
 
-## Installation
+### Prerequisites
 
-For easy using nginx in your own solutions on Kaspersky OS, it is recommended to incorporate it in the SDK.
-To do this, after the build you will need to run the script with root permissions:
+1. [Install](https://support.kaspersky.com/help/KCE/1.1/en-US/sdk_install_and_remove.htm) the KasperskyOS Community Edition SDK. You can download the latest version of KasperskyOS Community Edition for free from [os.kaspersky.com](https://os.kaspersky.com/development/). Minimum required version of the KasperskyOS Community Edition SDK is 1.1.0.24. For more information, see [System requirements](https://support.kaspersky.com/help/KCE/1.1/en-US/system_requirements.htm).
+1. Copy project sources files to your home directory. All files that are required to build the nginx web server for KasperskyOS and examples of KasperskyOS-based solutions are located in the following directory:
+   ```
+   ./kos
+   ```
+1. Set the environment variable `SDK_PREFIX` to `/opt/KasperskyOS-Community-Edition-<version>`, where `version` is the version of the KasperskyOS Community Edition SDK that you installed. To do this, run the following command:
+   ```
+   $ export SDK_PREFIX=/opt/KasperskyOS-Community-Edition-<version>
+   ```
 
-    ./kos/nginx/install.sh
+### Building the nginx web server for KasperskyOS
 
-## Deinstallation
+Run the following script to build the nginx web server for KasperskyOS:
+```
+./kos/nginx/cross-build.sh
+```
+The nginx web server for KasperskyOS is built using the CMake build system, which is provided in the KasperskyOS Community Edition SDK.
 
-To remove all files related to nginx from Kaspersky OS SDK, just run the script with root permissions:
+### Installing and removing the nginx web server for KasperskyOS
 
-    ./kos/nginx/uinstall.sh
+To install the nginx web server for KasperskyOS to the KasperskyOS Community Edition SDK, run the following script with root privileges:
+```
+./kos/nginx/install.sh
+```
 
-## Using in your own solutions on Kaspersky OS
+To remove the nginx web server for KasperskyOS from the KasperskyOS Community Edition SDK, run the following script with root privileges:
+```
+./kos/nginx/uninstall.sh
+```
 
-To connect nginx to your solution, you need to add the nginx package connection in the cmake build script:
+[⬆ Back to Top](#Table-of-contents)
 
-    find_package (nginx REQUIRED)
+## Usage
 
-Next, you need to add the Nginx entity to the list of project entities and give it the required permissions to work with disk, network, etc.
+When you develop a KasperskyOS-based solution, use the [recommended structure of project directories](https://support.kaspersky.com/help/KCE/1.1/en-US/cmake_using_sdk_cmake.htm) to simplify usage of CMake scripts.
 
-After that, in the folder from which the image of the connected disk will be built, you need to add the nginx configuration files, as well as, if necessary, static files that the web server will response to clients' requests.
+To include the nginx web server in your KasperskyOS-based solution, follow these steps:
 
-For further information on how to add nginx to your solution, see the example in the folder:
+1. Add the `find_package()` command to the `./CMakeLists.txt` root file to find and load the `nginx` package.
+   ```
+   find_package (nginx REQUIRED)
+   ```
+   For more information about the `./CMakeLists.txt` root file, see [KasperskyOS Community Edition Online Help](https://support.kaspersky.com/help/KCE/1.1/en-US/cmake_lists_root.htm).
+1. Add the `Nginx` program to a list of program executable files defined in the `./einit/CMakeLists.txt` file as follows:
+   ```
+   set (ENTITIES
+        Nginx
+        ...)
+   ```
+   For more information about the `./einit/CMakeLists.txt` file for building the `Einit` initializing program, see the [KasperskyOS Community Edition Online Help](https://support.kaspersky.com/help/KCE/1.1/en-US/cmake_lists_einit.htm).
+1. Specify a list of IPC channels that connect the `Nginx` program to `VfsNet` and `VfsRamFs` programs in the `./einit/src/init.yaml.in` template file. For more information about the `init.yaml.in` template file, see the [KasperskyOS Community Edition Online Help](https://support.kaspersky.com/help/KCE/1.1/en-US/cmake_yaml_templates.htm).
+1. Create a solution security policy description in the `./einit/src/security.psl.in` template file. For more information about the `security.psl.in` template file, see the [KasperskyOS Community Edition Online Help](https://support.kaspersky.com/help/KCE/1.1/en-US/cmake_psl_templates.htm).
+1. Add nginx configuration files to the directory `./resources`.
 
-    ./kos/exmaple
+### Example
+
+You can review the example of developing a solution using nginx web server in KasperskyOS in the [`./kos/example`](kos/example) directory.
+
+[⬆ Back to Top](#Table-of-contents)
+
+## Contributing
+
+Only KasperskyOS-specific changes can be approved. See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions on code contribution.
+
+## License
+
+This project is licensed under the terms of the nginx license. See [LICENSE](LICENSE) for more information.
+
+[⬆ Back to Top](#Table-of-contents)
