@@ -62,13 +62,13 @@ Statically created IPC channels:
 * `kl.rump.Dhcpcd` → `kl.VfsNet`
 * `kl.VfsRamFs` → `kl.drivers.RAMDisk`
 
-The [`./kos/example/einit/src/init.yaml.in`](kos/example/einit/src/init.yaml.in) template is used to automatically generate a part of the solution initialization description file `init.yaml`. For more information about the `init.yaml.in` template file, see the [KasperskyOS Community Edition Online Help](https://support.kaspersky.com/help/KCE/1.1/en-US/cmake_yaml_templates.htm).
+The [`./einit/src/init.yaml.in`](einit/src/init.yaml.in) template is used to automatically generate a part of the solution initialization description file `init.yaml`. For more information about the `init.yaml.in` template file, see the [KasperskyOS Community Edition Online Help](https://support.kaspersky.com/help/KCE/1.1/en-US/cmake_yaml_templates.htm).
 
 [⬆ Back to Top](#Table-of-contents)
 
 ### Security policy description
 
-The [`./kos/example/einit/src/security.psl`](kos/example/einit/src/security.psl) file contains a solution security policy description. For more information about the `security.psl` file, see [Describing a security policy for a KasperskyOS-based solution](https://support.kaspersky.com/help/KCE/1.1/en-US/ssp_descr.htm).
+The [`./einit/src/security.psl`](einit/src/security.psl) file contains a solution security policy description. For more information about the `security.psl` file, see [Describing a security policy for a KasperskyOS-based solution](https://support.kaspersky.com/help/KCE/1.1/en-US/ssp_descr.htm).
 
 [⬆ Back to Top](#Table-of-contents)
 
@@ -94,17 +94,17 @@ $ ./cross-build.sh
 ```
 Running `cross-build.sh` creates a KasperskyOS-based solution image that includes the example. The `kos-qemu-image` solution image is located in the `./build/einit` directory.
 
-[./kos/example/netinit/CMakeLists.txt](kos/example/netinit/CMakeLists.txt)—CMake commands for building the `NetInit` program.
+[./netinit/CMakeLists.txt](netinit/CMakeLists.txt)—CMake commands for building the `NetInit` program.
 
-[./kos/example/einit/CMakeLists.txt](kos/example/einit/CMakeLists.txt)—CMake commands for building the `Einit` program and the solution image.
+[./einit/CMakeLists.txt](/einit/CMakeLists.txt)—CMake commands for building the `Einit` program and the solution image.
 
-[./kos/example/CMakeLists.txt](kos/example/CMakeLists.txt)—CMake commands for building the solution.
+[./CMakeLists.txt](CMakeLists.txt)—CMake commands for building the solution.
 
 [⬆ Back to Top](#Table-of-contents)
 
 ## Usage
 
-1. To run the example on QEMU, go to the directory `./kos/example` and run the following command:
+1. To run the example on QEMU, go to the directory with the nginx example and run the following command:
    ```
    $ ./cross-build.sh
    ```
