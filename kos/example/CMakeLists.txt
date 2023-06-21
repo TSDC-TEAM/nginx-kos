@@ -10,7 +10,7 @@ include (platform/options)
 
 # Initialize CMake library for KasperskyOS SDK.
 include (platform)
-initialize_platform()
+initialize_platform (FORCE_STATIC)
 
 include (platform/nk)
 
