@@ -287,7 +287,9 @@ ngx_set_srcaddr_cmsg(struct cmsghdr *cmsg, struct sockaddr *local_sockaddr)
 
         pkt = (struct in_pktinfo *) CMSG_DATA(cmsg);
         ngx_memzero(pkt, sizeof(struct in_pktinfo));
+#ifndef __KOS__
         pkt->ipi_spec_dst = sin->sin_addr;
+#endif
 
 #endif
         return len;
