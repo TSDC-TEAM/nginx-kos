@@ -4,7 +4,7 @@
 
 ## What is an nginx web server for KasperskyOS?
 
-The nginx web server for KasperskyOS is based on the nginx [1.22.1](https://github.com/nginx/nginx/tree/branches/stable-1.22). Please refer to the <http://nginx.org/en/docs/> for more information that are not related to this project.
+The nginx web server for KasperskyOS is based on the nginx [1.25.1](https://github.com/nginx/nginx/releases/tag/release-1.25.1). Please refer to the <http://nginx.org/en/docs/> for more information that are not related to this project.
 
 For the nginx web server for KasperskyOS the number of worker processes can only be 1. The [`worker_processes`](http://nginx.org/en/docs/ngx_core_module.html#worker_processes) directive in the nginx configuration file is ignored. Other limitations and known issues are described in the [KasperskyOS Community Edition Online Help](https://support.kaspersky.com/help/KCE/1.1/en-US/limitations_and_known_problems.htm).
 
