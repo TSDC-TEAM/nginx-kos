@@ -6,20 +6,14 @@ TEMP =		tmp
 
 CC =		cl
 OBJS =		objs.msvc8
-OPENSSL =	openssl-1.1.1q
-ZLIB =		zlib-1.2.12
+OPENSSL =	openssl-1.1.1t
+ZLIB =		zlib-1.2.13
 PCRE =		pcre2-10.39
 
 
 release: export
 
 	mv $(TEMP)/$(NGINX)/auto/configure $(TEMP)/$(NGINX)
-
-	# delete incomplete sources
-	rm $(TEMP)/$(NGINX)/src/event/ngx_event_acceptex.c
-	rm $(TEMP)/$(NGINX)/src/event/ngx_event_connectex.c
-	rm $(TEMP)/$(NGINX)/src/event/modules/ngx_iocp_module.*
-	rm -r $(TEMP)/$(NGINX)/src/os/win32
 
 	mv $(TEMP)/$(NGINX)/docs/text/LICENSE $(TEMP)/$(NGINX)
 	mv $(TEMP)/$(NGINX)/docs/text/README $(TEMP)/$(NGINX)
@@ -81,6 +75,8 @@ win32:
 		--with-http_slice_module				\
 		--with-mail						\
 		--with-stream						\
+		--with-stream_realip_module				\
+		--with-stream_ssl_preread_module			\
 		--with-openssl=$(OBJS)/lib/$(OPENSSL)			\
 		--with-openssl-opt="no-asm no-tests -D_WIN32_WINNT=0x0501" \
 		--with-http_ssl_module					\
