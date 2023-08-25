@@ -16,6 +16,7 @@ use EDL kl.drivers.RAMDisk
 use EDL kl.drivers.BSP
 use EDL kl.drivers.GPIO
 use EDL kl.drivers.DNetSrv
+use EDL kl.drivers.Bcm2711MboxArmToVc
 
 execute {
     grant ()
