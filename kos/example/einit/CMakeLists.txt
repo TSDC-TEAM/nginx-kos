@@ -79,7 +79,7 @@ build_kos_hw_image (kos-image
                     IMAGE_FILES ${ENTITIES}
                                 ${FILES})
 
-# kos-image depends on disk image generation only if ramdisk used
+# KasperskyOS image depends on disk image generation only if ramdisk used
 if (NOT ROOTFS_SDCARD)
     add_dependencies (kos-image ${DISK_IMAGE})
 endif ()

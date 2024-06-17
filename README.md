@@ -6,7 +6,9 @@
 
 The nginx web server for KasperskyOS is based on the nginx [1.25.1](https://github.com/nginx/nginx/releases/tag/release-1.25.1). Please refer to the <http://nginx.org/en/docs/> for more information that are not related to this project.
 
-For the nginx web server for KasperskyOS the number of worker processes can only be 1. The [`worker_processes`](http://nginx.org/en/docs/ngx_core_module.html#worker_processes) directive in the nginx configuration file is ignored. Other limitations and known issues are described in the [KasperskyOS Community Edition Online Help](https://support.kaspersky.com/help/KCE/1.1/en-US/limitations_and_known_problems.htm).
+For the nginx web server for KasperskyOS the number of worker processes can only be 1. The [`worker_processes`](http://nginx.org/en/docs/ngx_core_module.html#worker_processes) directive in the nginx configuration file is ignored.
+
+For additional details on KasperskyOS, including its limitations and known issues, please refer to the [KasperskyOS Community Edition Online Help](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&&customization=KCE&helpid=community_edition).
 
 ## Table of contents
 
@@ -26,7 +28,7 @@ For the nginx web server for KasperskyOS the number of worker processes can only
 
 ### Prerequisites
 
-1. [Install](https://support.kaspersky.com/help/KCE/1.1/en-US/sdk_install_and_remove.htm) the KasperskyOS Community Edition SDK. You can download the latest version of KasperskyOS Community Edition for free from [os.kaspersky.com](https://os.kaspersky.com/development/). Minimum required version of the KasperskyOS Community Edition SDK is 1.1.0.24. For more information, see [System requirements](https://support.kaspersky.com/help/KCE/1.1/en-US/system_requirements.htm).
+1. [Install](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&&customization=KCE&helpid=sdk_install_and_remove) the KasperskyOS Community Edition SDK. You can download the latest version of KasperskyOS Community Edition for free from [os.kaspersky.com](https://os.kaspersky.com/development/). Minimum required version of the KasperskyOS Community Edition SDK is 1.2. For more information, see [System requirements](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&&customization=KCE&helpid=system_requirements).
 1. Copy project sources files to your home directory. All files that are required to build the nginx web server for KasperskyOS and examples of KasperskyOS-based solutions are located in the following directory:
    ```
    ./kos
@@ -60,7 +62,7 @@ To remove the nginx web server for KasperskyOS from the KasperskyOS Community Ed
 
 ## Usage
 
-When you develop a KasperskyOS-based solution, use the [recommended structure of project directories](https://support.kaspersky.com/help/KCE/1.1/en-US/cmake_using_sdk_cmake.htm) to simplify usage of CMake scripts.
+When you develop a KasperskyOS-based solution, use the [recommended structure of project directories](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&&customization=KCE&helpid=cmake_using_sdk_cmake) to simplify usage of CMake scripts.
 
 To include the nginx web server in your KasperskyOS-based solution, follow these steps:
 
@@ -68,16 +70,16 @@ To include the nginx web server in your KasperskyOS-based solution, follow these
    ```
    find_package (nginx REQUIRED)
    ```
-   For more information about the `./CMakeLists.txt` root file, see [KasperskyOS Community Edition Online Help](https://support.kaspersky.com/help/KCE/1.1/en-US/cmake_lists_root.htm).
+   For more information about the `./CMakeLists.txt` root file, see [KasperskyOS Community Edition Online Help](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&&customization=KCE&helpid=cmake_lists_root).
 1. Add the `Nginx` program to a list of program executable files defined in the `./einit/CMakeLists.txt` file as follows:
    ```
    set (ENTITIES
         Nginx
         ...)
    ```
-   For more information about the `./einit/CMakeLists.txt` file for building the `Einit` initializing program, see the [KasperskyOS Community Edition Online Help](https://support.kaspersky.com/help/KCE/1.1/en-US/cmake_lists_einit.htm).
-1. Specify a list of IPC channels that connect the `Nginx` program to `VfsNet` and `VfsRamFs` programs in the `./einit/src/init.yaml.in` template file. For more information about the `init.yaml.in` template file, see the [KasperskyOS Community Edition Online Help](https://support.kaspersky.com/help/KCE/1.1/en-US/cmake_yaml_templates.htm).
-1. Create a solution security policy description in the `./einit/src/security.psl.in` template file. For more information about the `security.psl.in` template file, see the [KasperskyOS Community Edition Online Help](https://support.kaspersky.com/help/KCE/1.1/en-US/cmake_psl_templates.htm).
+   For more information about the `./einit/CMakeLists.txt` file for building the `Einit` initializing program, see the [KasperskyOS Community Edition Online Help](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&&customization=KCE&helpid=cmake_lists_einit).
+1. Specify a list of IPC channels that connect the `Nginx` program to `VfsNet` and `VfsRamFs` programs in the `./einit/src/init.yaml.in` template file. For more information about the `init.yaml.in` template file, see the [KasperskyOS Community Edition Online Help](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&&customization=KCE&helpid=cmake_yaml_templates).
+1. Create a solution security policy description in the `./einit/src/security.psl.in` template file. For more information about the `security.psl.in` template file, see the [KasperskyOS Community Edition Online Help](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&&customization=KCE&helpid=cmake_psl_templates).
 1. Add nginx configuration files to the directory `./resources`.
 
 ### Example

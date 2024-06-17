@@ -24,7 +24,7 @@ include_directories (${vfs_INCLUDE})
 find_package (rump REQUIRED COMPONENTS DHCPCD_ENTITY)
 include_directories (${rump_INCLUDE})
 
-# Add a package with VFS progam implementations.
+# Add a package with VFS program implementations.
 find_package (precompiled_vfs REQUIRED)
 include_directories (${precompiled_vfs_INCLUDE})
 
