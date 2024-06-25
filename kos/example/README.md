@@ -62,13 +62,13 @@ Statically created IPC channels:
 * `kl.rump.Dhcpcd` → `kl.VfsNet`
 * `kl.VfsRamFs` → `kl.drivers.RAMDisk`
 
-The [`./einit/src/init.yaml.in`](einit/src/init.yaml.in) template is used to automatically generate a part of the solution initialization description file `init.yaml`. For more information about the `init.yaml.in` template file, see the [KasperskyOS Community Edition Online Help](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&&customization=KCE&helpid=cmake_yaml_templates).
+The [`./einit/src/init.yaml.in`](einit/src/init.yaml.in) template is used to automatically generate a part of the solution initialization description file `init.yaml`. For more information about the `init.yaml.in` template file, see the [KasperskyOS Community Edition Online Help](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&customization=KCE_cmake_yaml_templates).
 
 [⬆ Back to Top](#Table-of-contents)
 
 ### Security policy description
 
-The [`./einit/src/security.psl`](einit/src/security.psl) file contains a solution security policy description. For more information about the `security.psl` file, see [Describing a security policy for a KasperskyOS-based solution](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&&customization=KCE&helpid=ssp_descr).
+The [`./einit/src/security.psl`](einit/src/security.psl) file contains a solution security policy description. For more information about the `security.psl` file, see [Describing a security policy for a KasperskyOS-based solution](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&customization=KCE_ssp_descr).
 
 [⬆ Back to Top](#Table-of-contents)
 
@@ -108,7 +108,7 @@ Running `cross-build.sh` creates a KasperskyOS-based solution image that include
    ```
    $ ./cross-build.sh
    ```
-   For more information about running example on Raspberry Pi 4 B, see the [KasperskyOS Community Edition Online Help](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&&customization=KCE&helpid=running_sample_programs_rpi).
+   For more information about running example on Raspberry Pi 4 B, see the [KasperskyOS Community Edition Online Help](https://click.kaspersky.com/?hl=en-us&link=online_help&pid=kos&version=1.2&customization=KCE_running_sample_programs_rpi).
 1. Wait until a message like this appears in the standard output:
     ```
     en0: adding default route via 10.0.2.2
