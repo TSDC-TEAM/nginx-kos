@@ -1,8 +1,19 @@
 #!/bin/bash
 
-if [ -z $SDK_PREFIX ]; then
-    echo "Error: SDK_PREFIX is empty."
-    exit 1
+usage() {
+    echo "Usage: $0 [SDK_PATH] "
+    echo ""
+    echo "Optional argument:"
+    echo "  SDK_PATH - Path to the KasperskyOS SDK."
+    echo ""
+    echo "Examples:"
+    echo "  ./cross-build.sh"
+    echo "  ./cross-build.sh \"/opt/KasperskyOS-Community-Edition-<version>\""
+    echo ""
+}
+
+if [ $# -eq 1 ];then
+    SDK_PATH="$1"
 fi
 
 SCRIPT_DIR=$(cd "$(dirname ${0})"; pwd)
@@ -11,28 +22,24 @@ BUILD=$(pwd)/build
 mkdir -p $BUILD && cd $BUILD
 
 export LANG=C
-export TARGET="aarch64-kos"
+export TARGET_PLATFORM="aarch64-kos"
 export PKG_CONFIG=""
-export INSTALL_PREFIX=$SDK_PREFIX/sysroot-$TARGET
-BUILD_SIM_TARGET="y"
+
+[ ! -z $SDK_PATH ] && export SDK_PREFIX=$SDK_PATH
+
+export INSTALL_PREFIX=$SDK_PREFIX/sysroot-$TARGET_PLATFORM
+
+if [ -z "$SDK_PREFIX" ];then
+    echo "Path to the KasperskyOS SDK is not specified."
+    usage
+    exit 1
+fi
+
 export PATH="$SDK_PREFIX/toolchain/bin:$PATH"
-
-export BUILD_WITH_CLANG=
-export BUILD_WITH_GCC=
-
-TOOLCHAIN_SUFFIX=""
-
-if [ "$BUILD_WITH_CLANG" == "y" ];then
-    TOOLCHAIN_SUFFIX="-clang"
-fi
-
-if [ "$BUILD_WITH_GCC" == "y" ];then
-    TOOLCHAIN_SUFFIX="-gcc"
-fi
 
 $SDK_PREFIX/toolchain/bin/cmake -G "Unix Makefiles" \
       -D CMAKE_BUILD_TYPE:STRING=Release \
       -D CMAKE_INSTALL_PREFIX:STRING=$INSTALL_PREFIX \
-      -D CMAKE_FIND_ROOT_PATH="$SDK_PREFIX/sysroot-$TARGET" \
-      -D CMAKE_TOOLCHAIN_FILE=$SDK_PREFIX/toolchain/share/toolchain-$TARGET$TOOLCHAIN_SUFFIX.cmake \
+      -D CMAKE_FIND_ROOT_PATH="$SDK_PREFIX/sysroot-$TARGET_PLATFORM" \
+      -D CMAKE_TOOLCHAIN_FILE=$SDK_PREFIX/toolchain/share/toolchain-$TARGET_PLATFORM.cmake \
       $SCRIPT_DIR/ && $SDK_PREFIX/toolchain/bin/cmake --build .

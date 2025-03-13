@@ -14,7 +14,12 @@ ngx_daemon(ngx_log_t *log)
 {
     int  fd;
 
-    switch (fork()) {
+#ifndef __KOS__
+    ngx_pid_t ret = fork();
+#else
+    ngx_pid_t ret = -1;
+#endif
+    switch (ret) {
     case -1:
         ngx_log_error(NGX_LOG_EMERG, log, ngx_errno, "fork() failed");
         return NGX_ERROR;

@@ -1,1 +1,1 @@
-entity netinit.NetInit
+task class netinit.NetInit

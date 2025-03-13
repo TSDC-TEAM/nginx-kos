@@ -1,0 +1,11 @@
+execute: kl.core.Execute
+
+use nk.base._
+
+use EDL kl.core.Core
+use EDL Einit
+use EDL netinit.NetInit
+use EDL nginx.Nginx
+@INIT_EXTERNAL_ENTITIES@
+
+use nonsecurity._

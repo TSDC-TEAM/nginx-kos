@@ -2,6 +2,7 @@ project (einit)
 
 # Toolkit for working with NK parser.
 include (platform/image)
+include (${KL_SDK_ROOT_PATH}/common/build-sd-image.cmake)
 
 # Set compilation flags.
 project_header_default ("STANDARD_GNU_11:YES" "STRICT_WARNINGS:NO")
@@ -14,7 +15,7 @@ set (ENTITIES
 	${rump_DHCPCD_ENTITY})
 
 if ("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "aarch64")
-    set (SECURITY_PSL_FILE "src/security.psl")
+    set (SECURITY_PSL_FILE "src/security.psl.in")
 else ()
     message (FATAL_ERROR "${CMAKE_SYSTEM_PROCESSOR} architecture is not supported." )
 endif ()
@@ -75,9 +76,15 @@ add_custom_target (${DISK_IMAGE}
 build_kos_hw_image (kos-image
                     EINIT_ENTITY EinitHw
                     CONNECTIONS_CFG "src/init.yaml.in"
-                    SECURITY_PSL "src/security.psl"
+                    SECURITY_PSL "src/security.psl.in"
                     IMAGE_FILES ${ENTITIES}
                                 ${FILES})
+
+# Create a top-level CMake target named sd-image which can be used
+# when building an SD card image to be started on the hardware platform.
+build_sd_image (sd-image
+                KOS_IMAGE_TARGET kos-image
+                IMAGE_FS ${IMAGE_FS})
 
 # KasperskyOS image depends on disk image generation only if ramdisk used
 if (NOT ROOTFS_SDCARD)
@@ -85,13 +92,13 @@ if (NOT ROOTFS_SDCARD)
 endif ()
 
 # KasperskyOS image for QEMU with simulation targets (sim, gdbsim, gdb).
-build_kos_qemu_image(kos-qemu-image
-                        EINIT_ENTITY EinitQemu
-                        CONNECTIONS_CFG "src/init.yaml.in"
-                        SECURITY_PSL ${SECURITY_PSL_FILE}
-                        QEMU_FLAGS "${QEMU_FLAGS} -nic user,hostfwd=tcp::8000-:8000 -display none"
-                        IMAGE_FILES ${ENTITIES}
-                                    ${FILES})
+build_kos_qemu_image (kos-qemu-image
+                      EINIT_ENTITY EinitQemu
+                      CONNECTIONS_CFG "src/init.yaml.in"
+                      SECURITY_PSL ${SECURITY_PSL_FILE}
+                      QEMU_FLAGS "${QEMU_FLAGS} -nic user,hostfwd=tcp::8000-:8000 -display none"
+                      IMAGE_FILES ${ENTITIES}
+                                  ${FILES})
 add_dependencies (kos-qemu-image ${DISK_IMAGE})
 
 #set_target_properties (EinitHw PROPERTIES LINK_FLAGS ${VULN_LDFLAGS})

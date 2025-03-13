@@ -1,1 +1,1 @@
-entity nginx.Nginx
+task class nginx.Nginx

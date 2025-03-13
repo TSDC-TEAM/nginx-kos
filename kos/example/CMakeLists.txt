@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.25)
 
 project (nginx_example)
 
@@ -13,6 +13,15 @@ include (platform)
 initialize_platform (FORCE_STATIC)
 
 include (platform/nk)
+
+# Detect board.
+if (CMAKE_SYSTEM_SOC STREQUAL "BCM2711")
+    set (BOARD "RPI4_BCM2711")
+elseif (CMAKE_SYSTEM_SOC STREQUAL "RK3568")
+    set (BOARD "RADXA_ROCK_3A")
+else ()
+    message (FATAL_ERROR "Unsupported board for SoC '${CMAKE_SYSTEM_SOC}'")
+endif ()
 
 find_package (nginx REQUIRED)
 

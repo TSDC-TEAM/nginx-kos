@@ -188,8 +188,11 @@ ngx_spawn_process(ngx_cycle_t *cycle, ngx_spawn_proc_pt proc, void *data,
 
     ngx_process_slot = s;
 
-
+#ifndef __KOS__
     pid = fork();
+#else
+    pid = -1;
+#endif
 
     switch (pid) {
 
@@ -277,7 +280,13 @@ ngx_execute_proc(ngx_cycle_t *cycle, void *data)
 {
     ngx_exec_ctx_t  *ctx = data;
 
-    if (execve(ctx->path, ctx->argv, ctx->envp) == -1) {
+#ifndef __KOS__
+    int ret = execve(ctx->path, ctx->argv, ctx->envp);
+#else
+    int ret = -1;
+#endif
+
+    if (ret == -1) {
         ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno,
                       "execve() failed while executing %s \"%s\"",
                       ctx->name, ctx->path);
